@@ -1,6 +1,5 @@
 body {
   font-family: Arial, sans-serif;
-  display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
@@ -62,6 +61,11 @@ button {
 }
 
 .additional-info{
-  color: grey;
-  font-size: 12px;
+  padding:30px;
+  font-size: 20px;
+}
+
+.row-text{
+  padding-top:5px;
+  padding-left:20px;
 }
