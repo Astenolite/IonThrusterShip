@@ -12,7 +12,11 @@ const thrusterMassThrust = 0.5 //	kg/Ns	how much mass do the thrusters take up p
 //distance from Mars to Deimos = 23460000m
 //distance from earth to moon = 384400000m
 
-
+let distanceAux = 150000000 * 1000;
+let solarPanelAreaAux = 1000;
+let totalFuelAux = 10000;
+let massCargoAux = 100000;
+let massMiningEquipmentAux = 1000;
 
 function submitInputs() {
   // Get the values from all input boxes
@@ -21,6 +25,17 @@ function submitInputs() {
   let totalFuel = parseFloat(document.getElementById("input3").value);
   let massCargo = parseFloat(document.getElementById("input4").value);
   let massMiningEquipment = parseFloat(document.getElementById("input5").value);
+
+  if(isNaN(distance))
+    distance = distanceAux;
+  if(isNaN(solarPanelArea))
+    solarPanelArea = solarPanelAreaAux;
+  if(isNaN(totalFuel))
+    totalFuel = totalFuelAux;
+  if(isNaN(massCargo))
+    massCargo = massCargoAux;
+  if(isNaN(massMiningEquipment))
+    massMiningEquipment = massMiningEquipmentAux;
 
 
   let solarPanelProduction = (solarPanelArea * solarPanelProductionArea);
@@ -41,19 +56,31 @@ function submitInputs() {
   document.getElementById("SM-INFO-totalMass").querySelector("#data").innerHTML = massEmptyShip.toFixed(5);
 
 
-    let A = massCargo - totalFuel;
-    let B = totalFuel * massEmptyShip + totalFuel * totalFuel;
-	let C = totalFuel;
+  let A = massCargo;
+  let B = totalFuel;
+	let C = massEmptyShip;
 
-	let minimumTime = 2 * Math.sqrt(B * (A * C + B)) + A * C + 2 * B;
-	minimumTime /= (C * C);
-	minimumTime *= thrsterFuelConsumptionThrust * distance;
-	minimumTime /= (3600 * 24);
+	let minimumTime = (2 * (Math.sqrt((A + C) * (B + C)) + C) + A + B)/B
+  minimumTime *= (distance * thrsterFuelConsumptionThrust);
+  minimumTime /= (3600 * 24);
+  let aux = (B / (A - B)) * Math.sqrt((A + C) * (B + C)); 
+  let X = (-B * aux + A * aux - B * B - B * C)/(A - B); 
+  
 
-    let X = -1*C*(B + Math.sqrt(B * (A*C+B)));
-    X /= (-2*B - A*C - 2*Math.sqrt(B*B + A*B*A));
+  console.log("f(" + X + ") = " + minimumTime);
 
-    console.log(X);
-	document.getElementById("SJ-INFO-estimatedTime").querySelector("#data").innerHTML = minimumTime.toFixed(5);
 
+  X = 3000;
+  let speed1 = X/(thrsterFuelConsumptionThrust * (massEmptyShip + totalFuel - X + X/2));
+  let speed2 = (totalFuel- X)/(thrsterFuelConsumptionThrust * (massEmptyShip + massCargo + (totalFuel-X)/2));
+  let time1 = (distance/speed1)/(3600*24)
+  let time2 = (distance/speed2)/(3600*24);
+
+  console.log(distance + " "+ speed1 + " " + distance/speed1);
+  console.log("maximum speed going: " + speed1);
+  console.log("maximum speed returning: " + speed2);
+
+  document.getElementById("SJ-INFO-estimatedTime-trip2").querySelector("#data").innerHTML = time2.toFixed(5);
+	document.getElementById("SJ-INFO-estimatedTime-trip1").querySelector("#data").innerHTML = time1.toFixed(5);
+  document.getElementById("SJ-INFO-estimatedTime").querySelector("#data").innerHTML = minimumTime.toFixed(5);
 }
