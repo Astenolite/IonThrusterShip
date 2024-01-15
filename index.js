@@ -41,16 +41,19 @@ function submitInputs() {
   document.getElementById("SM-INFO-totalMass").querySelector("#data").innerHTML = massEmptyShip.toFixed(5);
 
 
-  let M = massCargo - totalFuel;
-	let N = totalFuel * massEmptyShip + totalFuel * totalFuel;
-	let P = totalFuel;
+    let A = massCargo - totalFuel;
+    let B = totalFuel * massEmptyShip + totalFuel * totalFuel;
+	let C = totalFuel;
 
-	let minimumTime = 2 * Math.sqrt(N * (M * P + N)) + M * P + 2 * N;
-	minimumTime /= (P * P);
+	let minimumTime = 2 * Math.sqrt(B * (A * C + B)) + A * C + 2 * B;
+	minimumTime /= (C * C);
 	minimumTime *= thrsterFuelConsumptionThrust * distance;
 	minimumTime /= (3600 * 24);
 
+    let X = -1*C*(B + Math.sqrt(B * (A*C+B)));
+    X /= (-2*B - A*C - 2*Math.sqrt(B*B + A*B*A));
 
+    console.log(X);
 	document.getElementById("SJ-INFO-estimatedTime").querySelector("#data").innerHTML = minimumTime.toFixed(5);
 
 }
